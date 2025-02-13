@@ -1,0 +1,49 @@
+name: "Terraform Infrastructure Change Management Pipeline with GitHub Actions"
+
+on:
+ push:
+   branches:
+   - v0.1
+ pull_request: {}
+
+env:
+ TF_LOG: INFO
+ ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+ ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+ AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+ AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+ terraform:
+   name: "Terraform Infrastructure Change Management"
+   runs-on: ubuntu-latest
+   defaults:
+     run:
+       shell: bash
+       working-directory: .
+
+   steps:
+     - name: Add Git credential
+       run: |
+         git config --global url."https://git:${{ secrets.GIT_PASS }}@github.com/goldstrike77".insteadOf "https://github.com/goldstrike77"
+         git config --global url."https://${{ secrets.GIT_PASS }}:x-oauth-basic@github.com/goldstrike77".insteadOf ssh://git@github.com/goldstrike77
+
+     - name: Checkout the repository to the runner
+       uses: actions/checkout@v2
+
+     - name: Setup Terragrunt
+       uses: #**TBD-hashicorp/setup-Terragrunt@v1**
+
+     - name: Init
+       run: terragrunt run-all init -input=false -reconfigure --terragrunt-non-interactive
+
+     - name: Plan
+       run: terragrunt run-all plan --terragrunt-non-interactive
+
+     - name: Apply
+       if: github.event_name == 'push' && github.event.head_commit.message == 'deploy'
+       run: terragrunt apply-all --terragrunt-non-interactive
+
+     - name: Destroy
+       if: github.event_name == 'push' && github.event.head_commit.message == 'destroy'
+       run: terragrunt run-all destroy --terragrunt-non-interactive -input=false

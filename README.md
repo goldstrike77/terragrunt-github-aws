@@ -1,2 +1,5 @@
-# terragrunt-github-aws
-Continuous Deployment Automation on AWS landing-zones using github action.
+This Terraform will create the landing zone for a startup to begin building on Amazon Web Services. It will create the following resources:
+&nbsp;
+|IAM|Network|
+|:---|:---|
+||VPCs<br>DHCP option sets<br>Subnets<br>|

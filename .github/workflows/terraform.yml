@@ -12,6 +12,8 @@ env:
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+ tf_version: '1.10.5'
+ tg_version: '0.69.9'
 
 jobs:
  terraform:
@@ -29,10 +31,13 @@ jobs:
          git config --global url."https://${{ secrets.GIT_PASS }}:x-oauth-basic@github.com/goldstrike77".insteadOf ssh://git@github.com/goldstrike77
 
      - name: Checkout the repository to the runner
-       uses: actions/checkout@v2
+       uses: actions/checkout@main
 
-     - name: Setup Terragrunt
-       uses: #**TBD-hashicorp/setup-Terragrunt@v1**
+     - name: Check terragrunt HCL
+       uses: gruntwork-io/terragrunt-action@v2
+       with:
+         tf_version: ${{ env.tf_version }}
+         tg_version: ${{ env.tg_version }}
 
      - name: Init
        run: terragrunt run-all init -input=false -reconfigure --terragrunt-non-interactive

@@ -12,8 +12,8 @@ env:
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
- tf_version: '1.10.5'
- tg_version: '0.69.9'
+ tf_version: "1.10.5"
+ tg_version: "v0.69.9"
 
 jobs:
  terraform:
@@ -33,12 +33,18 @@ jobs:
      - name: Checkout the repository to the runner
        uses: actions/checkout@main
 
-     - name: Terragrunt HCL init
-       uses: gruntwork-io/terragrunt-action@v2
+     - name: Setup Terraform with specified version on the runner
+       uses: hashicorp/setup-terraform@v2
        with:
-         tf_version: ${{ env.tf_version }}
-         tg_version: ${{ env.tg_version }}
-         tg_command: 'terragrunt run-all init -input=false -reconfigure --terragrunt-non-interactive'
+         terraform_version: ${{ env.tf_version }}
+
+     - name: Terragrunt Install
+       uses: userbradley/action-install-terragrunt@v1.1.1
+       with:
+         version: ${{ env.tg_version }}
+
+     - name: Init
+       run: terragrunt run-all init -input=false -reconfigure --terragrunt-non-interactive
 
      - name: Plan
        run: terragrunt run-all plan --terragrunt-non-interactive

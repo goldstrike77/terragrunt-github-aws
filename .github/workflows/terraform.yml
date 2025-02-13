@@ -12,7 +12,7 @@ env:
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
- tf_version: "1.10.5"
+ tf_version: "1.10.1"
  tg_version: "v0.69.9"
 
 jobs:
@@ -31,10 +31,10 @@ jobs:
          git config --global url."https://${{ secrets.GIT_PASS }}:x-oauth-basic@github.com/goldstrike77".insteadOf ssh://git@github.com/goldstrike77
 
      - name: Checkout the repository to the runner
-       uses: actions/checkout@main
+       uses: actions/checkout@v4
 
      - name: Setup Terraform with specified version on the runner
-       uses: hashicorp/setup-terraform@v2
+       uses: hashicorp/setup-terraform@v3
        with:
          terraform_version: ${{ env.tf_version }}
 

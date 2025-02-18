@@ -26,3 +26,34 @@ module "aws_subnet" {
   aws_resources = var.aws_resources
   depends_on    = [module.aws_vpc_dhcp_options_association]
 }
+
+# 对等连接
+module "aws_vpc_peering_connection" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/peering-connection?ref=v5.x"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+  depends_on    = [module.aws_vpc]
+}
+
+# 互联网网关
+module "aws_internet_gateway" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/internet-gateway?ref=v5.x"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+  depends_on    = [module.aws_vpc]
+}
+
+# 弹性IP
+module "aws_eip" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//ec2/eip?ref=v5.x"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+}
+
+# NAT 网关
+module "aws_nat_gateway" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/nat-gateway?ref=v5.x"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+  depends_on    = [module.aws_eip, module.aws_internet_gateway, module.aws_subnet]
+}

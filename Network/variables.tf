@@ -22,7 +22,7 @@ variable "aws_resources" {
           subnet = [
             {
               availability_zone = "ap-east-1a"
-              cidr_block = "10.50.0.0/24"
+              cidr_block        = "10.50.0.0/24"
               tags = {
                 Name = "subnet-vpc-ap-east-1-01"
               }
@@ -34,13 +34,60 @@ variable "aws_resources" {
           tags = {
             Name = "vpc-ap-east-1-02"
           }
+        },
+        {
+          cidr_block = "10.52.0.0/16"
+          tags = {
+            Name = "vpc-ap-east-1-03"
+          }
         }
       ],
       vpc_dhcp_options = [
         {
-          vpc = ["vpc-ap-east-1-01", "vpc-ap-east-1-02"]
+          vpc = ["vpc-ap-east-1-01", "vpc-ap-east-1-02", "vpc-ap-east-1-03"]
           tags = {
             Name = "dopt-vpc-ap-east-1-01"
+          }
+        }
+      ],
+      vpc_peering_connection = [
+        {
+          vpc      = "vpc-ap-east-1-01"
+          peer_vpc = "vpc-ap-east-1-02"
+          tags = {
+            Name = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-02"
+          }
+        },
+        {
+          vpc      = "vpc-ap-east-1-01"
+          peer_vpc = "vpc-ap-east-1-03"
+          tags = {
+            Name = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-03"
+          }
+        }
+      ],
+      internet_gateway = [
+        {
+          vpc = "vpc-ap-east-1-01"
+          tags = {
+            Name = "igw-vpc-ap-east-1-01"
+          }
+        }
+      ],
+      eip = [
+        {
+          tags = {
+            Name = "eipalloc-ap-east-1-01"
+          }
+        }
+      ],
+      nat_gateway = [
+        {
+          allocation = "eipalloc-ap-east-1-01"
+          private_ip = "10.50.0.10"
+          subnet     = "subnet-vpc-ap-east-1-01"
+          tags = {
+            Name = "nat-ap-east-1-01"
           }
         }
       ]

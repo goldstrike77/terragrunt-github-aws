@@ -90,6 +90,19 @@ variable "aws_resources" {
             Name = "nat-ap-east-1-01"
           }
         }
+      ],
+      route_table = [
+        {
+          vpc = "vpc-ap-east-1-01"
+          tags = {
+            Name = "rtb-vpc-ap-east-1-01"
+          }
+          route = {
+            cidr_block = "0.0.0.0/0"
+            gateway    = "igw-vpc-ap-east-1-01"
+          }
+          subnet = ["subnet-vpc-ap-east-1-01"]
+        }
       ]
     }
   ]

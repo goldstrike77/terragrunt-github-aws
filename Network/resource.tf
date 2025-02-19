@@ -43,17 +43,25 @@ module "aws_internet_gateway" {
   depends_on    = [module.aws_vpc]
 }
 
-# 弹性IP
-module "aws_eip" {
-  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//ec2/eip?ref=v5.x"
-  tags          = var.tags
-  aws_resources = var.aws_resources
-}
+## 弹性IP
+#module "aws_eip" {
+#  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//ec2/eip?ref=v5.x"
+#  tags          = var.tags
+#  aws_resources = var.aws_resources
+#}
+#
+## NAT 网关
+#module "aws_nat_gateway" {
+#  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/nat-gateway?ref=v5.x"
+#  tags          = var.tags
+#  aws_resources = var.aws_resources
+#  depends_on    = [module.aws_eip, module.aws_internet_gateway, module.aws_subnet]
+#}
 
-# NAT 网关
-module "aws_nat_gateway" {
-  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/nat-gateway?ref=v5.x"
+# 路由表
+module "aws_route_table" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/route-table?ref=v5.x"
   tags          = var.tags
   aws_resources = var.aws_resources
-  depends_on    = [module.aws_eip, module.aws_internet_gateway, module.aws_subnet]
+  depends_on    = [module.aws_vpc, module.aws_internet_gateway]
 }

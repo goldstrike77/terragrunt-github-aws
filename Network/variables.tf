@@ -24,7 +24,7 @@ variable "aws_resources" {
               availability_zone = "ap-east-1a"
               cidr_block        = "10.50.0.0/24"
               tags = {
-                Name = "subnet-vpc-ap-east-1-01"
+                Name = "subnet-vpc-ap-east-1-01-01"
               }
             }
           ]
@@ -34,12 +34,44 @@ variable "aws_resources" {
           tags = {
             Name = "vpc-ap-east-1-02"
           }
+          subnet = [
+            {
+              availability_zone = "ap-east-1a"
+              cidr_block        = "10.51.0.0/24"
+              tags = {
+                Name = "subnet-vpc-ap-east-1-02-01"
+              }
+            },
+            {
+              availability_zone = "ap-east-1a"
+              cidr_block        = "10.51.1.0/24"
+              tags = {
+                Name = "subnet-vpc-ap-east-1-02-02"
+              }
+            }
+          ]
         },
         {
           cidr_block = "10.52.0.0/16"
           tags = {
             Name = "vpc-ap-east-1-03"
           }
+          subnet = [
+            {
+              availability_zone = "ap-east-1a"
+              cidr_block        = "10.52.0.0/24"
+              tags = {
+                Name = "subnet-vpc-ap-east-1-03-01"
+              }
+            },
+            {
+              availability_zone = "ap-east-1a"
+              cidr_block        = "10.52.1.0/24"
+              tags = {
+                Name = "subnet-vpc-ap-east-1-03-02"
+              }
+            }
+          ]
         }
       ],
       vpc_dhcp_options = [
@@ -95,13 +127,36 @@ variable "aws_resources" {
         {
           vpc = "vpc-ap-east-1-01"
           tags = {
-            Name = "rtb-vpc-ap-east-1-01"
+            Name = "rtb-vpc-ap-east-1-01-01"
           }
-          route = {
-            cidr_block = "0.0.0.0/0"
-            gateway    = "igw-vpc-ap-east-1-01"
+          route = [
+            { cidr_block = "0.0.0.0/0", gateway = "igw-vpc-ap-east-1-01" },
+            { cidr_block = "10.51.0.0/16", vpc_peering_connection = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-02" },
+            { cidr_block = "10.52.0.0/16", vpc_peering_connection = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-03" }
+          ]
+          subnet = ["subnet-vpc-ap-east-1-01-01"]
+        },
+        {
+          vpc = "vpc-ap-east-1-02"
+          tags = {
+            Name = "rtb-vpc-ap-east-1-02-01"
           }
-          subnet = ["subnet-vpc-ap-east-1-01"]
+          route = [
+            { cidr_block = "0.0.0.0/0", nat_gateway = "nat-ap-east-1-01" },
+            { cidr_block = "10.50.0.0/16", vpc_peering_connection = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-02" },
+          ]
+          subnet = ["subnet-vpc-ap-east-1-02-01", "subnet-vpc-ap-east-1-02-02"]
+        },
+        {
+          vpc = "vpc-ap-east-1-03"
+          tags = {
+            Name = "rtb-vpc-ap-east-1-03-01"
+          }
+          route = [
+            { cidr_block = "0.0.0.0/0", nat_gateway = "nat-ap-east-1-01" },
+            { cidr_block = "10.50.0.0/16", vpc_peering_connection = "pcx-vpc-ap-east-1-01-vpc-ap-east-1-03" },
+          ]
+          subnet = ["subnet-vpc-ap-east-1-03-01", "subnet-vpc-ap-east-1-03-02"]
         }
       ]
     }

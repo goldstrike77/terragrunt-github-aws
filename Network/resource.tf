@@ -28,11 +28,29 @@ module "aws_subnet" {
 }
 
 # 对等连接
-module "aws_vpc_peering_connection" {
-  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/peering-connection?ref=v5.x"
+#module "aws_vpc_peering_connection" {
+#  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/peering-connection?ref=v5.x"
+#  tags          = var.tags
+#  aws_resources = var.aws_resources
+#  depends_on    = [module.aws_vpc]
+#}
+
+# 中转网关
+module "aws_ec2_transit_gateway" {
+  #  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//transit-gateway?ref=v5.x"
+  source        = "/home/suzhetao/github/terraform/module/terraform-module-aws/transit-gateway"
   tags          = var.tags
   aws_resources = var.aws_resources
-  depends_on    = [module.aws_vpc]
+  depends_on    = [module.aws_subnet]
+}
+
+# 中转网关挂载
+module "aws_ec2_transit_gateway_vpc_attachment" {
+  #  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//transit-gateway/vpc-attachment?ref=v5.x"
+  source        = "/home/suzhetao/github/terraform/module/terraform-module-aws/transit-gateway/vpc-attachment"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+  depends_on    = [module.aws_ec2_transit_gateway]
 }
 
 # 互联网网关

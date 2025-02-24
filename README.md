@@ -2,4 +2,4 @@ This Terraform will create the landing zone for a startup to begin building on A
 &nbsp;
 |IAM|Network|
 |:---|:---|
-||VPCs<br>DHCP option sets<br>Subnets<br>Peering connections<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>|
+||VPCs<br>DHCP option sets<br>Subnets<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>|

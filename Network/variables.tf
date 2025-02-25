@@ -162,6 +162,7 @@ variable "aws_resources" {
       ],
       transit_gateway = [
         {
+          auto_accept_shared_attachments  = "enable"
           default_route_table_association = "disable"
           default_route_table_propagation = "disable"
           tags = {
@@ -202,13 +203,44 @@ variable "aws_resources" {
                 Name = "tgw-rtb-ap-east-1-hub-01"
               }
               route = [
-                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" },
-                { destination_cidr_block = "192.168.0.0/16", blackhole = true },
-                { destination_cidr_block = "172.16.0.0/12", blackhole = true },
-                { destination_cidr_block = "10.0.0.0/8", blackhole = true }
+                { destination_cidr_block = "10.51.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01" },
+                { destination_cidr_block = "10.52.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02" },
               ]
-              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
-              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+              # association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+              # propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+            },
+            {
+              tags = {
+                Name = "tgw-rtb-ap-east-1-hub-02"
+              }
+              route = [
+                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" },
+              ]
+              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01"]
+              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01"]
+            },
+            {
+              tags = {
+                Name = "tgw-rtb-ap-east-1-hub-03"
+              }
+              route = [
+                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" },
+              ]
+              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+            }
+          ]
+        }
+      ],
+      security_group = [
+        {
+          tags = {
+            Name = "sg-ap-east-1-default-01"
+          },
+          vpc = "vpc-ap-east-1-app-01"
+          rule = [
+            {
+              from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests."
             }
           ]
         }

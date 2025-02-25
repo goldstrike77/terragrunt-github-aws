@@ -54,7 +54,8 @@ module "aws_ec2_transit_gateway_vpc_attachment" {
 
 # 中转网关路由表
 module "aws_ec2_transit_gateway_route_table" {
-  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//transit-gateway/route-table?ref=v5.x"
+  #  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//transit-gateway/route-table?ref=v5.x"
+  source        = "/home/suzhetao/github/terraform/module/terraform-module-aws/transit-gateway/route-table"
   tags          = var.tags
   aws_resources = var.aws_resources
   depends_on = [
@@ -102,5 +103,16 @@ module "aws_route_table" {
     module.aws_subnet,
     module.aws_nat_gateway,
     module.aws_ec2_transit_gateway_route_table
+  ]
+}
+
+# 安全组
+module "aws_security_group" {
+  #source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/security-group?ref=v5.x"
+  source        = "/home/suzhetao/github/terraform/module/terraform-module-aws/vpc/security-group"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+  depends_on = [
+    module.aws_vpc
   ]
 }

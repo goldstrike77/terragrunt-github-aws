@@ -19,6 +19,7 @@ variable "aws_resources" {
           tags = {
             Name = "vpc-ap-east-1-egress-01"
           }
+          enable_dns_hostnames = true
           subnet = [
             {
               availability_zone = "ap-east-1a"
@@ -41,6 +42,7 @@ variable "aws_resources" {
           tags = {
             Name = "vpc-ap-east-1-app-01"
           }
+          enable_dns_hostnames = true
           subnet = [
             {
               availability_zone = "ap-east-1a"
@@ -63,6 +65,7 @@ variable "aws_resources" {
           tags = {
             Name = "vpc-ap-east-1-app-02"
           }
+          enable_dns_hostnames = true
           subnet = [
             {
               availability_zone = "ap-east-1a"
@@ -133,9 +136,7 @@ variable "aws_resources" {
             Name = "rtb-vpc-ap-east-1-egress-01-02"
           }
           route = [
-            { cidr_block = "0.0.0.0/0", nat_gateway = "nat-ap-east-1-egress-01" },
-            { cidr_block = "10.51.0.0/16", transit_gateway = "tgw-ap-east-1-hub-01" },
-            { cidr_block = "10.52.0.0/16", transit_gateway = "tgw-ap-east-1-hub-01" },
+            { cidr_block = "0.0.0.0/0", nat_gateway = "nat-ap-east-1-egress-01" }
           ]
           subnet = ["subnet-vpc-ap-east-1-egress-01-02"]
         },
@@ -171,7 +172,7 @@ variable "aws_resources" {
           vpc_attachment = [
             {
               vpc    = "vpc-ap-east-1-egress-01"
-              subnet = "subnet-vpc-ap-east-1-egress-01-01"
+              subnet = "subnet-vpc-ap-east-1-egress-01-02"
               tags = {
                 Name = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01"
               }
@@ -203,31 +204,13 @@ variable "aws_resources" {
                 Name = "tgw-rtb-ap-east-1-hub-01"
               }
               route = [
-                { destination_cidr_block = "10.51.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01" },
-                { destination_cidr_block = "10.52.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02" },
+                { destination_cidr_block = "192.168.0.0/16", blackhole = true },
+                { destination_cidr_block = "172.16.0.0/12", blackhole = true },
+                { destination_cidr_block = "10.0.0.0/8", blackhole = true },
+                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" }
               ]
-              # association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
-              # propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
-            },
-            {
-              tags = {
-                Name = "tgw-rtb-ap-east-1-hub-02"
-              }
-              route = [
-                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" },
-              ]
-              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01"]
-              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01"]
-            },
-            {
-              tags = {
-                Name = "tgw-rtb-ap-east-1-hub-03"
-              }
-              route = [
-                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01" },
-              ]
-              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
-              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+              association = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
+              propagation = ["tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-egress-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-01", "tgw-attach-tgw-ap-east-1-hub-01-vpc-ap-east-1-app-02"]
             }
           ]
         }
@@ -235,13 +218,22 @@ variable "aws_resources" {
       security_group = [
         {
           tags = {
-            Name = "sg-ap-east-1-default-01"
+            Name = "sg-vpc-ap-east-1-app-01-01"
           },
           vpc = "vpc-ap-east-1-app-01"
           rule = [
-            {
-              from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests."
-            }
+            { from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests." },
+            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." }
+          ]
+        },
+        {
+          tags = {
+            Name = "sg-vpc-ap-east-1-app-02-01"
+          },
+          vpc = "vpc-ap-east-1-app-02"
+          rule = [
+            { from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests." },
+            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." }
           ]
         }
       ]

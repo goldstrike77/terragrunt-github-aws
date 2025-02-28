@@ -239,13 +239,24 @@ variable "aws_resources" {
                 Name = "tgw-rtb-ap-south-1-hub-01"
               }
               route = [
-#                { destination_cidr_block = "192.168.0.0/16", blackhole = true },
-#                { destination_cidr_block = "172.16.0.0/12", blackhole = true },
-#                { destination_cidr_block = "10.0.0.0/8", blackhole = true },
-                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01" }
+                { destination_cidr_block = "0.0.0.0/0", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01" },
+                { destination_cidr_block = "192.168.0.0/16", blackhole = true },
+                { destination_cidr_block = "172.16.0.0/12", blackhole = true },
+                { destination_cidr_block = "10.0.0.0/8", blackhole = true }
               ]
-              association = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-02"]
-              propagation = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-02"]
+              association = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-02"]
+              propagation = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-01", "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-02"]
+            },
+            {
+              tags = {
+                Name = "tgw-rtb-ap-south-1-hub-02"
+              }
+              route = [
+                { destination_cidr_block = "10.51.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-01" },
+                { destination_cidr_block = "10.52.0.0/16", blackhole = false, transit_gateway_attachment = "tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-app-02" }
+              ]
+              association = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01"]
+              propagation = ["tgw-attach-tgw-ap-south-1-hub-01-vpc-ap-south-1-egress-01"]
             }
           ]
         }
@@ -258,7 +269,8 @@ variable "aws_resources" {
           vpc = "vpc-ap-south-1-egress-01"
           rule = [
             { from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests." },
-            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." }
+            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." },
+            { from_port = 0, protocol = "-1", to_port = 0, type = "egress", cidr_blocks = ["0.0.0.0/0"], description = "Allow all egress." }
           ]
         },
         {
@@ -268,7 +280,8 @@ variable "aws_resources" {
           vpc = "vpc-ap-south-1-app-01"
           rule = [
             { from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests." },
-            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." }
+            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." },
+            { from_port = 0, protocol = "-1", to_port = 0, type = "egress", cidr_blocks = ["0.0.0.0/0"], description = "Allow all egress." }
           ]
         },
         {
@@ -278,7 +291,8 @@ variable "aws_resources" {
           vpc = "vpc-ap-south-1-app-02"
           rule = [
             { from_port = 8, protocol = "icmp", to_port = 0, type = "ingress", cidr_blocks = ["0.0.0.0/0"], description = "Allow ICMP ping requests." },
-            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." }
+            { from_port = 0, protocol = "tcp", to_port = 22, type = "ingress", cidr_blocks = ["10.50.0.0/16"], description = "Allow SSH requests." },
+            { from_port = 0, protocol = "-1", to_port = 0, type = "egress", cidr_blocks = ["0.0.0.0/0"], description = "Allow all egress." }
           ]
         }
       ]

@@ -114,3 +114,37 @@ module "aws_security_group" {
     module.aws_vpc
   ]
 }
+
+# 访问控制管理角色
+module "aws_iam_role" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//iam/role?ref=v5.x"
+  tags          = var.tags
+  aws_resources = var.aws_resources
+}
+
+# 访问控制管理策略
+module "aws_iam_role_policy" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//iam/role-policy?ref=v5.x"
+  aws_resources = var.aws_resources
+  depends_on = [
+    module.aws_iam_role
+  ]
+}
+
+# 日志组
+module "aws_cloudwatch_log_group" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//cloudwatch/log-group?ref=v5.x"
+  aws_resources = var.aws_resources
+  tags          = var.tags
+}
+
+# 流日志
+module "aws_flow_log" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//vpc/flow-log?ref=v5.x"
+  aws_resources = var.aws_resources
+  tags          = var.tags
+  depends_on = [
+    module.aws_iam_role,
+    module.aws_cloudwatch_log_group
+  ]
+}

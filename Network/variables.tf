@@ -295,6 +295,67 @@ variable "aws_resources" {
             { from_port = 0, protocol = "-1", to_port = 0, type = "egress", cidr_blocks = ["0.0.0.0/0"], description = "Allow all egress." }
           ]
         }
+      ],
+      iam = [
+        {
+          roles = [
+            {
+              name = "RoleForFlowLogs"
+              assume_role_policy = {
+                "Version" : "2012-10-17",
+                "Statement" : [{
+                  "Sid" : "",
+                  "Effect" : "Allow",
+                  "Principal" : {
+                    "Service" : "vpc-flow-logs.amazonaws.com"
+                  },
+                  "Action" : "sts:AssumeRole"
+                  }
+                ]
+              }
+            }
+          ]
+          policies = [
+            {
+              name = "RoleForFlowLogsPolicy"
+              role = ["RoleForFlowLogs"]
+              policy = {
+                "Version" : "2012-10-17",
+                "Statement" : [{
+                  "Action" : [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents",
+                    "logs:DescribeLogGroups",
+                    "logs:DescribeLogStreams"
+                  ],
+                  "Effect" : "Allow",
+                  "Resource" : "*"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      cloudwatch = [
+        {
+          log_group = [
+            {
+              name = "TransitGatewayLogGroup"
+            }
+          ]
+        }
+      ],
+      flow_log = [
+        {
+          iam_role        = "RoleForFlowLogs"
+          log_destination = "TransitGatewayLogGroup"
+          transit_gateway = "tgw-ap-south-1-hub-01"
+          tags = {
+            Name = "flow-log-tgw-ap-south-1-hub-01"
+          }
+        }
       ]
     }
   ]

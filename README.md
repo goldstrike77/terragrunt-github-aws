@@ -1,8 +1,8 @@
 This Terraform runbook will create the landing zone for a startup to begin building on Amazon Web Services. It will create the following resources:
 &nbsp;
-|IAM|Network|
-|:---|:---|
-||VPCs<br>DHCP option sets<br>Subnets<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>Security groups|
+|IAM|Network|Compliance|
+|:---|:---|:---|
+||VPCs<br>DHCP option sets<br>Subnets<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>Security groups|CloudTrail<br>|
 
 &nbsp;
 #### Network solution overview

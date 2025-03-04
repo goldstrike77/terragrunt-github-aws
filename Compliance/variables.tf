@@ -17,7 +17,8 @@ variable "aws_resources" {
         {
           bucket = [
             {
-              bucket = "cloudtrail-yejhgtvx"
+              bucket        = "cloudtrail-yejhgtvx"
+              force_destroy = true
               policy = {
                 "Version" : "2012-10-17",
                 "Statement" : [{
@@ -30,7 +31,7 @@ variable "aws_resources" {
                   "Resource" : "arn:aws:s3:::cloudtrail-yejhgtvx",
                   "Condition" : {
                     "StringEquals" : {
-                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/trail"
+                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/cloudtrail"
                     }
                   }
                   }, {
@@ -40,11 +41,11 @@ variable "aws_resources" {
                     "Service" : "cloudtrail.amazonaws.com"
                   },
                   "Action" : "s3:PutObject",
-                  "Resource" : "arn:aws:s3:::cloudtrail-yejhgtvx/[optionalPrefix]/AWSLogs/601601034655/*",
+                  "Resource" : "arn:aws:s3:::cloudtrail-yejhgtvx/AWSLogs/601601034655/*",
                   "Condition" : {
                     "StringEquals" : {
                       "s3:x-amz-acl" : "bucket-owner-full-control",
-                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/trail"
+                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/cloudtrail"
                     }
                   }
                   }
@@ -52,6 +53,12 @@ variable "aws_resources" {
               }
             }
           ]
+        }
+      ],
+      cloudtrail = [
+        {
+          name           = "cloudtrail"
+          s3_bucket_name = "cloudtrail-yejhgtvx"
         }
       ]
     }

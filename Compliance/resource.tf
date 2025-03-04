@@ -13,3 +13,13 @@ module "aws_s3_bucket_policy" {
     module.aws_s3_bucket
   ]
 }
+
+# 账户活动
+module "aws_cloudtrail" {
+  source        = "git::https://github.com/goldstrike77/terraform-module-aws.git//cloudtrail?ref=v5.x"
+  aws_resources = var.aws_resources
+  tags          = var.tags
+  depends_on = [
+    module.aws_s3_bucket_policy
+  ]
+}

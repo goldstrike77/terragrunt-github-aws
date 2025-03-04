@@ -2,7 +2,7 @@ This Terraform runbook will create the landing zone for a startup to begin build
 &nbsp;
 |IAM|Network|Compliance|
 |:---|:---|:---|
-||VPCs<br>DHCP option sets<br>Subnets<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>Security groups|CloudTrail<br>|
+||VPCs<br>DHCP option sets<br>Subnets<br>Elastic IPs<br>Transit gateways<br>Internet gateways<br>NAT gateways<br>Route tables<br>Security groups|CloudTrail|
 
 &nbsp;
 #### Network solution overview

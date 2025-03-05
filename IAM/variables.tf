@@ -22,6 +22,32 @@ variable "aws_resources" {
           ]
         }
       ]
+      user = [
+        {
+          name          = "jackiechen"
+          force_destroy = true
+        },
+        {
+          name          = "tomwong"
+          force_destroy = true
+        },
+        {
+          name          = "samliu"
+          force_destroy = true
+        }
+      ]
+      group = [
+        {
+          name              = "admin"
+          user              = ["jackiechen"]
+          policy_attachment = ["AdministratorAccess"]
+        },
+        {
+          name              = "developer"
+          user              = ["tomwong", "samliu"]
+          policy_attachment = ["AmazonVPCFullAccess", "AmazonEC2FullAccess"]
+        }
+      ]
     }
   ]
 }

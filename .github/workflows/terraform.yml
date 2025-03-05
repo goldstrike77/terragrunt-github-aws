@@ -51,7 +51,9 @@ jobs:
 
      - name: Apply
        if: github.event_name == 'push' && github.event.head_commit.message == 'deploy'
-       run: terragrunt apply-all --terragrunt-non-interactive
+       run: |
+         terragrunt apply-all --terragrunt-non-interactive
+         terraform -chdir=IAM output -json aws_iam_user_password | jq > aws_iam_user_password.json
 
      - name: Destroy
        if: github.event_name == 'push' && github.event.head_commit.message == 'destroy'

@@ -6,4 +6,4 @@ This Terraform runbook will create the landing zone for a startup to begin build
 
 #### Network overview
 This architecture shows you how to use AWS Transit Gateway to centralize outbound internet traffic from multiple VPCs using hub-and-spoke design. This design includes two NAT gateways, as illustrated in the following diagram.
-<p><img src="https://raw.githubusercontent.com/goldstrike77/terragrunt-github-aws/v0.1/Network.drawio.png" align="center" /></p>
+<p><img src="https://raw.githubusercontent.com/goldstrike77/terragrunt-github-aws/hub-v0.1/Network.drawio.png" align="center" /></p>

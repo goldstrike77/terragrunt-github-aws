@@ -3,7 +3,7 @@ name: "Terraform Infrastructure Change Management Pipeline with GitHub Actions"
 on:
  push:
    branches:
-   - v0.1
+   - hub-v0.1
  pull_request: {}
 
 env:
@@ -11,8 +11,8 @@ env:
  TF_DATA_DIR: "~/.terraform"
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
- AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
- AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+ AWS_ACCESS_KEY_ID: ${{ secrets.HUB_AWS_ACCESS_KEY_ID }}
+ AWS_SECRET_ACCESS_KEY: ${{ secrets.HUB_AWS_SECRET_ACCESS_KEY }}
  tf_version: "1.12.2"
  tg_version: "v0.84.1"
 

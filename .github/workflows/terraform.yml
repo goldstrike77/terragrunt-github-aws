@@ -3,7 +3,7 @@ name: "Terraform Infrastructure Change Management Pipeline with GitHub Actions"
 on:
  push:
    branches:
-   - hub-v0.1
+   - spoke-v0.1
  pull_request: {}
 
 env:

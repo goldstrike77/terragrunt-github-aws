@@ -45,10 +45,10 @@ jobs:
          version: ${{ env.tg_version }}
 
      - name: Init
-       run: terragrunt init --all -input=false -reconfigure --non-interactive
+       run: terragrunt init --all -input=false -reconfigure --non-interactive -lock=false
 
      - name: Plan
-       run: terragrunt plan --all --non-interactive
+       run: terragrunt plan --all --non-interactive -terragrunt-source-update
 
      - name: Apply
        if: github.event_name == 'push' && github.event.head_commit.message == 'deploy'

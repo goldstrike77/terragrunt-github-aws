@@ -298,7 +298,7 @@ variable "aws_resources" {
       ],
       iam = [
         {
-          roles = [
+          role = [
             {
               name = "RoleForFlowLogs"
               assume_role_policy = {
@@ -315,10 +315,10 @@ variable "aws_resources" {
               }
             }
           ]
-          policies = [
+          policy = [
             {
               name = "RoleForFlowLogsPolicy"
-              role = ["RoleForFlowLogs"]
+              role = "RoleForFlowLogs"
               policy = {
                 "Version" : "2012-10-17",
                 "Statement" : [{

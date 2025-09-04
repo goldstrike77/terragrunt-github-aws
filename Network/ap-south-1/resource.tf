@@ -147,7 +147,7 @@ module "aws_flow_log" {
   aws_resources = var.aws_resources
   tags          = var.tags
   depends_on = [
-    module.aws_iam_role,
+    module.aws_iam_role_policy,
     module.aws_cloudwatch_log_group
   ]
 }

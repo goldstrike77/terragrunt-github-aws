@@ -11,8 +11,8 @@ env:
  TF_DATA_DIR: "~/.terraform"
  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
- AWS_ACCESS_KEY_ID: ${{ secrets.HUB_AWS_ACCESS_KEY_ID }}
- AWS_SECRET_ACCESS_KEY: ${{ secrets.HUB_AWS_SECRET_ACCESS_KEY }}
+ AWS_ACCESS_KEY_ID: ${{ secrets.SPOKE_AWS_ACCESS_KEY_ID }}
+ AWS_SECRET_ACCESS_KEY: ${{ secrets.SPOKE_AWS_SECRET_ACCESS_KEY }}
  tf_version: "1.12.2"
  tg_version: "v0.84.1"
 
@@ -52,9 +52,7 @@ jobs:
 
      - name: Apply
        if: github.event_name == 'push' && github.event.head_commit.message == 'deploy'
-       run: |
-         terragrunt apply --all --non-interactive
-         terraform -chdir=IAM output -json aws_iam_user_password | jq > aws_iam_user_password.json
+       run: terragrunt apply --all --non-interactive
 
      - name: Destroy
        if: github.event_name == 'push' && github.event.head_commit.message == 'destroy'

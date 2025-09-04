@@ -18,7 +18,7 @@ generate "provider" {
                 resource_group_name = "terraform-state"
                 storage_account_name = "satfstate01ssaz"
                 container_name = "tfstat"
-                key = "terragrunt-github-aws/${path_relative_to_include()}/terraform.tfstate"
+                key = "terragrunt-github-aws-spoke/${path_relative_to_include()}/terraform.tfstate"
                 subscription_id = "b971283c-e0b7-46a4-9496-9cbfb850ebe5"
                 tenant_id = "e824e20c-c5d7-4a69-adb1-3494404763a5"
         }

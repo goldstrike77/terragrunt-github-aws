@@ -261,6 +261,17 @@ variable "aws_resources" {
           ]
         }
       ],
+      ram_resource_share = [
+        {
+          name                      = "share-tgw-ap-south-1-hub-01"
+          allow_external_principals = true
+          resource = {
+            type = "transit-gateway"
+            name = "tgw-ap-south-1-hub-01"
+          }
+          principal = ["315922616014"]
+        }
+      ],
       security_group = [
         {
           tags = {

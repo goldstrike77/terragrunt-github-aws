@@ -1,6 +1,6 @@
 variable "tags" {
   default = {
-    location    = "ap-south-1"
+    location    = "ap-east-1"
     environment = "prd"
     customer    = "Learn"
     owner       = "Somebody"
@@ -31,7 +31,7 @@ variable "aws_resources" {
                   "Resource" : "arn:aws:s3:::cloudtrail-yejhgtvx",
                   "Condition" : {
                     "StringEquals" : {
-                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/cloudtrail"
+                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-east-1:601601034655:trail/cloudtrail"
                     }
                   }
                   }, {
@@ -45,12 +45,20 @@ variable "aws_resources" {
                   "Condition" : {
                     "StringEquals" : {
                       "s3:x-amz-acl" : "bucket-owner-full-control",
-                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-south-1:601601034655:trail/cloudtrail"
+                      "aws:SourceArn" : "arn:aws:cloudtrail:ap-east-1:601601034655:trail/cloudtrail"
                     }
                   }
                   }
                 ]
               }
+            }
+          ],
+          account_public_access_block = [
+            {
+              block_public_acls       = true
+              block_public_policy     = true
+              ignore_public_acls      = true
+              restrict_public_buckets = true
             }
           ]
         }
@@ -59,6 +67,24 @@ variable "aws_resources" {
         {
           name           = "cloudtrail"
           s3_bucket_name = "cloudtrail-yejhgtvx"
+        }
+      ],
+      ebs = [
+        {
+          encryption_by_default = [
+            {
+              enabled = false
+            }
+          ]
+        }
+      ],
+      guardduty = [
+        {
+          detector = [
+            {
+              enable = true
+            }
+          ]
         }
       ]
     }

@@ -1,6 +1,6 @@
 variable "tags" {
   default = {
-    location    = "ap-south-1"
+    location    = "ap-east-1"
     environment = "prd"
     customer    = "Learn"
     owner       = "Somebody"
